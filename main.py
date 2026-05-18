@@ -79,3 +79,85 @@ class Unit(ABC):
             raise ValueError(
                 f"Не хватает маны! Нужно {spell.mana_cost}, есть {self.mana}"
             )
+
+
+# МОДУЛЬ 2: Класс Character
+
+class Character(Unit):
+    """Класс персонажа с поддержкой разных игровых классов."""
+
+    VALID_CLASSES = ['warrior', 'mage', 'hunter']
+
+    def __init__(self, strength, dexterity, constitution, wisdom,
+                 intelligence, charisma, character_class):
+        """
+        Инициализация персонажа.
+
+        Args:
+            character_class: Класс персонажа ('warrior', 'mage', 'hunter')
+
+        Raises:
+            ValueError: Если передан неизвестный класс персонажа
+        """
+        super().__init__(strength, dexterity, constitution,
+                         wisdom, intelligence, charisma)
+
+        if character_class not in self.VALID_CLASSES:
+            raise ValueError(
+                f"Класс должен быть {self.VALID_CLASSES}, "
+                f"получен {character_class}"
+            )
+
+        self.character_class = character_class
+        self.max_health = self.calculate_max_health()
+        self.current_health = self.max_health
+        self.damage = self.calculate_damage()
+        self.defense = self.calculate_defense()
+        self.max_mana = self.calculate_max_mana()
+        self.mana = self.max_mana
+
+    def calculate_max_health(self):
+        """
+        Максимальное здоровье персонажа.
+        Формула: телосложение * 10 + сила // 2
+        """
+        return (self.constitution * 10) + (self.strength // 2)
+
+    def calculate_damage(self):
+        """Рассчитывает урон в зависимости от класса персонажа."""
+        if self.character_class == 'warrior':
+            # Сила * 2.2 + телосложение // 3
+            return int((self.strength * 2.2) + (self.constitution // 3))
+        elif self.character_class == 'mage':
+            # Интеллект * 2.5 + мудрость // 2
+            return int((self.intelligence * 2.5) + (self.wisdom // 2))
+        elif self.character_class == 'hunter':
+            # Ловкость * 1.9 + сила // 3
+            return int((self.dexterity * 1.9) + (self.strength // 3))
+        return 0
+
+    def calculate_defense(self):
+        """Рассчитывает защиту в зависимости от класса персонажа."""
+        if self.character_class == 'warrior':
+            # Телосложение * 1.8 + сила // 4
+            return int((self.constitution * 1.8) + (self.strength // 4))
+        elif self.character_class == 'mage':
+            # Мудрость * 1.3 + интеллект // 6
+            return int((self.wisdom * 1.3) + (self.intelligence // 6))
+        elif self.character_class == 'hunter':
+            # Ловкость * 1.6 + телосложение // 5
+            return int((self.dexterity * 1.6) + (self.constitution // 5))
+        return 0
+
+    def calculate_max_mana(self):
+        """Рассчитывает максимальную ману в зависимости от класса."""
+        if self.character_class == 'warrior':
+            # Интеллект + сила // 2
+            return self.intelligence + (self.strength // 2)
+        elif self.character_class == 'mage':
+            # Интеллект * 3 + мудрость
+            return (self.intelligence * 3) + self.wisdom
+        elif self.character_class == 'hunter':
+            # Ловкость * 1.5 + мудрость // 2
+            return int((self.dexterity * 1.5) + (self.wisdom // 2))
+        return 0
