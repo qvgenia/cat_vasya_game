@@ -161,3 +161,57 @@ class Character(Unit):
             # Ловкость * 1.5 + мудрость // 2
             return int((self.dexterity * 1.5) + (self.wisdom // 2))
         return 0
+
+
+# МОДУЛЬ 3: Заклинания
+
+class Spell(ABC):
+    """Абстрактный класс для всех заклинаний."""
+
+    def __init__(self, name, damage, mana_cost):
+        """
+        Инициализация заклинания.
+
+        Args:
+            name: Название заклинания
+            damage: Базовый урон
+            mana_cost: Стоимость в мане
+        """
+        self.name = name
+        self.damage = damage
+        self.mana_cost = mana_cost
+
+    @abstractmethod
+    def cast(self):
+        """Применяет заклинание и возвращает урон."""
+        pass
+
+
+class Fireball(Spell):
+    """Огненный шар - урон 35, стоимость 15 маны."""
+
+    def __init__(self):
+        super().__init__("Огненный шар", 35, 15)
+
+    def cast(self):
+        return self.damage
+
+
+class IceLance(Spell):
+    """Ледяное копьё - урон 25, стоимость 10 маны."""
+
+    def __init__(self):
+        super().__init__("Ледяное копьё", 25, 10)
+
+    def cast(self):
+        return self.damage
+
+
+class LightningBolt(Spell):
+    """Разряд молнии - урон 40, стоимость 20 маны."""
+
+    def __init__(self):
+        super().__init__("Разряд молнии", 40, 20)
+
+    def cast(self):
+        return self.damage
